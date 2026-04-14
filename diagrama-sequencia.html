@@ -7,6 +7,13 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f4; padding: 20px; text-align: center; }
   h1 { font-size: 20px; color: #333; margin-bottom: 12px; }
+  .cliente-box {
+    max-width: 780px; margin: 0 auto 24px; background: #fff; border-left: 5px solid #FFD580;
+    border-radius: 8px; padding: 20px 28px; text-align: left; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+  .cliente-box h2 { font-size: 16px; color: #B07D00; margin-bottom: 10px; }
+  .cliente-box p { font-size: 14px; color: #444; line-height: 1.7; margin-bottom: 8px; }
+  .cliente-box .assinatura { font-size: 13px; color: #888; font-style: italic; margin-top: 12px; }
   .legend { display: flex; justify-content: center; gap: 18px; margin-bottom: 16px; flex-wrap: wrap; }
   .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; }
   .legend-color { width: 16px; height: 16px; border-radius: 3px; border: 1px solid #999; }
@@ -16,6 +23,15 @@
 <body>
 
 <h1>Fluxo EDA &mdash; Processamento de Notas</h1>
+
+<div class="cliente-box">
+  <h2>&#128172; Pedido do Cliente</h2>
+  <p>&ldquo;Preciso de um sistema que receba os arquivos de notas das turmas e gere automaticamente um relat&oacute;rio com a m&eacute;dia de cada aluno, a m&eacute;dia da turma e se o aluno foi aprovado ou reprovado.</p>
+  <p>O professor vai enviar os arquivos com as notas. O sistema tem que processar tudo sozinho e no final gerar uma p&aacute;gina HTML com o resumo, pronta pra consulta.</p>
+  <p>N&atilde;o quero que o professor precise ficar esperando o processamento. Ele envia o arquivo e pronto &mdash; quando estiver pronto, o relat&oacute;rio j&aacute; fica dispon&iacute;vel.&rdquo;</p>
+  <div class="assinatura">&mdash; Cliente (dono da escola)</div>
+</div>
+
 <div class="legend">
   <div class="legend-item"><div class="legend-color" style="background:#FFD580"></div> Publisher</div>
   <div class="legend-item"><div class="legend-color" style="background:#D4B4FF"></div> Publisher + Consumer</div>
