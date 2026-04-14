@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Fluxo EDA - Processamento de Notas</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f4; padding: 20px; text-align: center; }
+  h1 { font-size: 20px; color: #333; margin-bottom: 12px; }
+  .legend { display: flex; justify-content: center; gap: 18px; margin-bottom: 16px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; }
+  .legend-color { width: 16px; height: 16px; border-radius: 3px; border: 1px solid #999; }
+  canvas { background: #fff; border: 1px solid #ddd; border-radius: 8px; display: block; margin: 0 auto; }
+</style>
+</head>
+<body>
+
+<h1>Fluxo EDA &mdash; Processamento de Notas</h1>
+<div class="legend">
+  <div class="legend-item"><div class="legend-color" style="background:#FFD580"></div> Publisher</div>
+  <div class="legend-item"><div class="legend-color" style="background:#D4B4FF"></div> Publisher + Consumer</div>
+  <div class="legend-item"><div class="legend-color" style="background:#7EC8E3"></div> Consumer</div>
+  <div class="legend-item"><div class="legend-color" style="background:#C8DCF0"></div> Servico Azure</div>
+</div>
+<canvas id="c"></canvas>
+
+<script>
+(function(){
+  var c = document.getElementById('c');
+  var ctx = c.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+  var CW = 1200, CH = 1050;
+  c.width = CW * dpr; c.height = CH * dpr;
+  c.style.width = CW + 'px'; c.style.height = CH + 'px';
+  ctx.scale(dpr, dpr);
+
+  var PUB  = {bg:'#FFD580', bd:'#B07D00', tx:'#3D2B00'};
+  var PRO  = {bg:'#D4B4FF', bd:'#7B2FBE', tx:'#2D0060'};
+  var CON  = {bg:'#7EC8E3', bd:'#0A6FA8', tx:'#00264D'};
+  var AZR  = {bg:'#C8DCF0', bd:'#2F6FB5', tx:'#0A2D5A'};
+
+  var cols = [75, 270, 445, 610, 770, 920, 1070, 1170];
+  var names = [
+    {l:'upload-blob.js',           c:PUB},
+    {l:'Blob Storage',             c:AZR, l2:'(container: uploads)'},
+    {l:'Service Bus Queue',        c:AZR, l2:'(entrada)'},
+    {l:'Event Grid Topic',         c:AZR},
+    {l:'Service Bus Queue',        c:AZR, l2:'(notasview)'},
+    {l:'notasprocessor',           c:PRO},
+    {l:'notasview',                c:CON},
+    {l:'saida/resumo.html',        c:CON}
+  ];
+
+  var TOPY = 24, BOXY = 48, LIFE_START = TOPY + BOXY, LIFE_END = CH - 60;
+
+  function rr(x,y,w,h,r,f,s){
+    ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
+    ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r);
+    ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h);
+    ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r);
+    ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+    ctx.fillStyle=f; ctx.fill(); ctx.strokeStyle=s; ctx.lineWidth=1.5; ctx.stroke();
+  }
+
+  function drawBox(i,y){
+    var p=names[i], x=cols[i], w=p.l2?148:120;
+    rr(x-w/2,y,w,BOXY,7,p.c.bg,p.c.bd);
+    ctx.fillStyle=p.c.tx; ctx.textAlign='center'; ctx.font='bold 11px Segoe UI,Arial';
+    if(p.l2){ ctx.fillText(p.l,x,y+20); ctx.font='10px Segoe UI,Arial'; ctx.fillText(p.l2,x,y+35); }
+    else { ctx.fillText(p.l,x,y+28); }
+  }
+
+  function lifelines(){
+    ctx.setLineDash([5,4]);
+    for(var i=0;i<cols.length;i++){
+      ctx.strokeStyle=names[i].c.bd; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(cols[i],LIFE_START); ctx.lineTo(cols[i],LIFE_END); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+  }
+
+  function head(x,y,d){
+    var s=d==='r'?1:-1;
+    ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x-s*8,y-4); ctx.lineTo(x-s*8,y+4); ctx.closePath(); ctx.fill();
+  }
+
+  function solid(i1,y,i2,t1,t2){
+    var x1=cols[i1], x2=cols[i2], d=x2>x1?'r':'l';
+    var a=d==='r'?6:-6, b=d==='r'?-6:6;
+    ctx.strokeStyle='#555'; ctx.fillStyle='#555'; ctx.lineWidth=1.5; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(x1+a,y); ctx.lineTo(x2+b,y); ctx.stroke();
+    head(x2+b,y,d);
+    ctx.fillStyle='#333'; ctx.font='11px Segoe UI,Arial'; ctx.textAlign='center';
+    if(t2){ ctx.fillText(t2,(x1+x2)/2,y-18); ctx.fillText(t1,(x1+x2)/2,y-6); }
+    else { ctx.fillText(t1,(x1+x2)/2,y-7); }
+  }
+
+  function dashed(i1,y,i2,t1,t2){
+    var x1=cols[i1], x2=cols[i2], d=x2>x1?'r':'l';
+    var a=d==='r'?6:-6, b=d==='r'?-6:6;
+    ctx.strokeStyle='#888'; ctx.fillStyle='#888'; ctx.lineWidth=1.5; ctx.setLineDash([6,3]);
+    ctx.beginPath(); ctx.moveTo(x1+a,y); ctx.lineTo(x2+b,y); ctx.stroke();
+    ctx.setLineDash([]); head(x2+b,y,d);
+    ctx.fillStyle='#666'; ctx.font='10px Segoe UI,Arial'; ctx.textAlign='center';
+    ctx.fillText(t1,(x1+x2)/2,y-7);
+    if(t2){ ctx.fillStyle='#999'; ctx.font='9px Segoe UI,Arial'; ctx.fillText(t2,(x1+x2)/2,y+13); }
+  }
+
+  function actBar(i,y,h){
+    var p=names[i]; ctx.fillStyle=p.c.bg; ctx.strokeStyle=p.c.bd; ctx.lineWidth=1;
+    ctx.fillRect(cols[i]-5,y,10,h); ctx.strokeRect(cols[i]-5,y,10,h);
+  }
+
+  function selfCall(i,y,t){
+    var x=cols[i];
+    ctx.strokeStyle='#555'; ctx.lineWidth=1.2; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(x+5,y); ctx.lineTo(x+42,y); ctx.lineTo(x+42,y+18); ctx.lineTo(x+5,y+18); ctx.stroke();
+    ctx.fillStyle='#555'; head(x+5,y+18,'l');
+    ctx.fillStyle='#333'; ctx.font='11px Segoe UI,Arial'; ctx.textAlign='left';
+    ctx.fillText(t,x+9,y-5);
+  }
+
+  function sep(y,t){
+    ctx.fillStyle='#eaeaea'; ctx.fillRect(10,y,CW-20,24);
+    ctx.strokeStyle='#ccc'; ctx.lineWidth=0.5;
+    ctx.strokeRect(10,y,CW-20,24);
+    ctx.fillStyle='#444'; ctx.font='bold 12px Segoe UI,Arial'; ctx.textAlign='center';
+    ctx.fillText(t,CW/2,y+16);
+  }
+
+  function note(x,y,lines){
+    var w=180, lh=14, pad=7, h=pad*2+lines.length*lh;
+    rr(x,y,w,h,4,'#FFFDE7','#ccc');
+    ctx.fillStyle='#555'; ctx.font='10px Segoe UI,Arial'; ctx.textAlign='left';
+    for(var i=0;i<lines.length;i++) ctx.fillText(lines[i],x+pad,y+pad+11+i*lh);
+  }
+
+  // ======== DRAW ========
+  ctx.fillStyle='#fff'; ctx.fillRect(0,0,CW,CH);
+
+  for(var i=0;i<names.length;i++) drawBox(i,TOPY);
+  for(var i=0;i<names.length;i++) drawBox(i,LIFE_END);
+  lifelines();
+
+  // IDX: 0=upload 1=blob 2=sbIn 3=eg 4=sbView 5=proc 6=view 7=html
+
+  var y = 100;
+
+  // ====== ENVIAR ARQUIVOS DE ALUNOS ======
+  sep(y, 'Enviar Arquivos de Alunos');
+  y += 42;
+
+  actBar(0, y-4, 16);
+  solid(0, y+4, 1, 'upload turma-*.json (BlobServiceClient)');
+  actBar(1, y+4, 55);
+  y += 38;
+
+  dashed(1, y, 2, 'Microsoft.Storage.BlobCreated', '(via Event Grid subscription)');
+
+  // ====== PROCESSAMENTO ======
+  y += 50;
+  sep(y, 'Processamento');
+  y += 42;
+
+  solid(2, y, 5, 'receiveMessages()');
+  actBar(5, y, 290);
+  y += 40;
+
+  solid(5, y, 1, 'downloadBlob(event.data.url)');
+  actBar(1, y, 42);
+  y += 32;
+
+  dashed(1, y, 5, 'conteudo JSON da turma');
+  y += 42;
+
+  selfCall(5, y, 'calcularResumo(payload)');
+  note(cols[5]-90, y+24, [
+    'Calcula:',
+    '\u2022 media por aluno',
+    '\u2022 media da turma',
+    '\u2022 status Aprovado / Reprovado'
+  ]);
+  y += 96;
+
+  solid(5, y, 3, 'POST ResumoNotasGerado', '(aeg-sas-key)');
+  actBar(3, y, 40);
+  y += 28;
+
+  dashed(3, y, 4, 'ResumoNotasGerado', '(via subscription)');
+  y += 40;
+
+  solid(5, y, 2, 'completeMessage()');
+
+  // ====== VISUALIZACAO ======
+  y += 44;
+  sep(y, 'Visualiza\u00e7\u00e3o');
+  y += 42;
+
+  solid(4, y, 6, 'receiveMessages()');
+  actBar(6, y, 180);
+  y += 36;
+
+  selfCall(6, y, 'parseEnvelope()');
+  ctx.fillStyle='#777'; ctx.font='10px Segoe UI,Arial'; ctx.textAlign='left';
+  ctx.fillText("extrair payload do campo 'data'", cols[6]+9, y+32);
+  y += 55;
+
+  solid(6, y, 7, 'salvarHtml(resumo)');
+  actBar(7, y, 36);
+  y += 26;
+
+  dashed(7, y, 6, 'caminho gravado');
+  y += 40;
+
+  solid(6, y, 4, 'completeMessage()');
+
+})();
+</script>
+</body>
+</html>
