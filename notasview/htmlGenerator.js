@@ -1,0 +1,168 @@
+const fs = require("fs/promises");
+const path = require("path");
+const { outputPath } = require("./config");
+
+function escapeHtml(valor) {
+  return String(valor ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function gerarHtml(resumo) {
+  const linhas = (resumo.alunos || [])
+    .map(
+      (aluno) => `
+        <tr>
+          <td>${escapeHtml(aluno.id)}</td>
+          <td>${escapeHtml(aluno.nome)}</td>
+          <td>${escapeHtml(aluno.quantidadeNotas)}</td>
+          <td>${escapeHtml((aluno.trabalhos || []).join(", "))}</td>
+          <td>${escapeHtml(Number(aluno.media || 0).toFixed(2))}</td>
+          <td class="status ${escapeHtml(String(aluno.status || "").toLowerCase())}">${escapeHtml(aluno.status || "-")}</td>
+        </tr>`
+    )
+    .join("");
+
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resumo de Notas</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f4efe6;
+        --panel: #fffaf2;
+        --ink: #1f2933;
+        --muted: #52606d;
+        --line: #d9cbb6;
+        --accent: #b85c38;
+        --ok: #2d6a4f;
+        --bad: #b02a37;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        padding: 32px;
+        background:
+          radial-gradient(circle at top right, rgba(184, 92, 56, 0.18), transparent 28%),
+          linear-gradient(135deg, #f7f1e8, var(--bg));
+        color: var(--ink);
+        font-family: Georgia, "Times New Roman", serif;
+      }
+
+      .wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: rgba(255, 250, 242, 0.92);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 32px;
+        box-shadow: 0 18px 40px rgba(61, 43, 31, 0.12);
+        backdrop-filter: blur(6px);
+      }
+
+      h1 { margin: 0 0 8px; font-size: 2.4rem; }
+      p  { margin: 0; color: var(--muted); }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin: 28px 0;
+      }
+
+      .card {
+        padding: 18px;
+        border-radius: 18px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+      }
+
+      .card strong {
+        display: block;
+        font-size: 1.6rem;
+        margin-top: 8px;
+        color: var(--accent);
+      }
+
+      table { width: 100%; border-collapse: collapse; border-radius: 16px; overflow: hidden; }
+      thead { background: #f0dfca; }
+
+      th, td {
+        text-align: left;
+        padding: 14px 12px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+
+      tbody tr:nth-child(even) { background: rgba(240, 223, 202, 0.28); }
+
+      .status { font-weight: 700; }
+      .status.aprovado { color: var(--ok); }
+      .status.reprovado { color: var(--bad); }
+
+      @media (max-width: 700px) {
+        body { padding: 16px; }
+        .wrap { padding: 20px; }
+        table, thead, tbody, th, td, tr { display: block; }
+        thead { display: none; }
+        tbody tr {
+          margin-bottom: 14px;
+          border: 1px solid var(--line);
+          border-radius: 14px;
+          overflow: hidden;
+          background: var(--panel);
+        }
+        td { border-bottom: 1px solid var(--line); }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <h1>Resumo de Notas</h1>
+      <p>Gerado em ${escapeHtml(new Date(resumo.geradoEm || Date.now()).toLocaleString("pt-BR"))}</p>
+
+      <section class="stats">
+        <article class="card">
+          <span>Total de alunos</span>
+          <strong>${escapeHtml(resumo.totalAlunos || 0)}</strong>
+        </article>
+        <article class="card">
+          <span>Média da turma</span>
+          <strong>${escapeHtml(Number(resumo.mediaTurma || 0).toFixed(2))}</strong>
+        </article>
+      </section>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Aluno</th>
+            <th>Qtd. notas</th>
+            <th>Trabalhos</th>
+            <th>Média</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>${linhas}</tbody>
+      </table>
+    </main>
+  </body>
+</html>`;
+}
+
+async function salvarHtml(resumo) {
+  const caminhoCompleto = path.resolve(outputPath);
+  await fs.mkdir(path.dirname(caminhoCompleto), { recursive: true });
+  await fs.writeFile(caminhoCompleto, gerarHtml(resumo), "utf-8");
+  return caminhoCompleto;
+}
+
+module.exports = { salvarHtml };

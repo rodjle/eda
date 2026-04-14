@@ -1,0 +1,24 @@
+{
+  "alunos": [
+    { "nome": "Ana Lima", "trabalho": "Lab 1", "nota": 8.5 },
+    { "nome": "Carlos Souza", "trabalho": "Lab 1", "nota": 5.0 },
+    { "nome": "Beatriz Santos", "trabalho": "Lab 1", "nota": 7.0 },
+    { "nome": "Pedro Alves", "trabalho": "Lab 1", "nota": 6.5 },
+    { "nome": "Maria Costa", "trabalho": "Lab 1", "nota": 9.0 },
+    { "nome": "Lucas Ferreira", "trabalho": "Lab 1", "nota": 4.5 },
+    { "nome": "Juliana Rocha", "trabalho": "Lab 1", "nota": 8.0 },
+    { "nome": "Rafael Mendes", "trabalho": "Lab 1", "nota": 6.0 },
+    { "nome": "Fernanda Gomes", "trabalho": "Lab 1", "nota": 7.5 },
+    { "nome": "Thiago Barbosa", "trabalho": "Lab 1", "nota": 3.0 },
+    { "nome": "Ana Lima", "trabalho": "Lab 2", "nota": 9.0 },
+    { "nome": "Carlos Souza", "trabalho": "Lab 2", "nota": 6.5 },
+    { "nome": "Beatriz Santos", "trabalho": "Lab 2", "nota": 8.0 },
+    { "nome": "Pedro Alves", "trabalho": "Lab 2", "nota": 7.0 },
+    { "nome": "Maria Costa", "trabalho": "Lab 2", "nota": 9.5 },
+    { "nome": "Lucas Ferreira", "trabalho": "Lab 2", "nota": 5.5 },
+    { "nome": "Juliana Rocha", "trabalho": "Lab 2", "nota": 7.0 },
+    { "nome": "Rafael Mendes", "trabalho": "Lab 2", "nota": 6.5 },
+    { "nome": "Fernanda Gomes", "trabalho": "Lab 2", "nota": 8.0 },
+    { "nome": "Thiago Barbosa", "trabalho": "Lab 2", "nota": 4.0 }
+  ]
+}

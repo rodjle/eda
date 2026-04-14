@@ -1,0 +1,14 @@
+{
+  "name": "notasview",
+  "version": "1.0.0",
+  "description": "Le um resumo de notas de uma fila do Azure Service Bus e gera um arquivo HTML.",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@azure/service-bus": "^7.9.5",
+    "dotenv": "^16.4.5"
+  }
+}

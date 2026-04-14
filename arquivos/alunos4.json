@@ -1,0 +1,24 @@
+{
+  "alunos": [
+    { "nome": "Ana Lima", "trabalho": "Projeto Final", "nota": 10.0 },
+    { "nome": "Carlos Souza", "trabalho": "Projeto Final", "nota": 7.5 },
+    { "nome": "Camila Nunes", "trabalho": "Projeto Final", "nota": 9.0 },
+    { "nome": "Bruno Carvalho", "trabalho": "Projeto Final", "nota": 3.0 },
+    { "nome": "Aline Martins", "trabalho": "Projeto Final", "nota": 8.0 },
+    { "nome": "Roberto Dias", "trabalho": "Projeto Final", "nota": 5.0 },
+    { "nome": "Priscila Farias", "trabalho": "Projeto Final", "nota": 7.0 },
+    { "nome": "Henrique Castro", "trabalho": "Projeto Final", "nota": 6.5 },
+    { "nome": "Vanessa Ribeiro", "trabalho": "Projeto Final", "nota": 9.5 },
+    { "nome": "Marcos Oliveira", "trabalho": "Projeto Final", "nota": 4.0 },
+    { "nome": "Aline Martins", "trabalho": "Revisão", "nota": 8.5 },
+    { "nome": "Roberto Dias", "trabalho": "Revisão", "nota": 6.0 },
+    { "nome": "Priscila Farias", "trabalho": "Revisão", "nota": 7.5 },
+    { "nome": "Henrique Castro", "trabalho": "Revisão", "nota": 7.0 },
+    { "nome": "Vanessa Ribeiro", "trabalho": "Revisão", "nota": 9.0 },
+    { "nome": "Marcos Oliveira", "trabalho": "Revisão", "nota": 5.5 },
+    { "nome": "Ana Lima", "trabalho": "Revisão", "nota": 9.5 },
+    { "nome": "Carlos Souza", "trabalho": "Revisão", "nota": 8.0 },
+    { "nome": "Camila Nunes", "trabalho": "Revisão", "nota": 8.5 },
+    { "nome": "Bruno Carvalho", "trabalho": "Revisão", "nota": 4.5 }
+  ]
+}

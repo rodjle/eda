@@ -1,0 +1,24 @@
+{
+  "alunos": [
+    { "nome": "Camila Nunes", "trabalho": "Seminário", "nota": 9.5 },
+    { "nome": "Bruno Carvalho", "trabalho": "Seminário", "nota": 4.0 },
+    { "nome": "Larissa Teixeira", "trabalho": "Seminário", "nota": 7.5 },
+    { "nome": "Diego Moreira", "trabalho": "Seminário", "nota": 6.0 },
+    { "nome": "Isabela Ramos", "trabalho": "Seminário", "nota": 8.5 },
+    { "nome": "Felipe Cardoso", "trabalho": "Seminário", "nota": 5.5 },
+    { "nome": "Natália Pinto", "trabalho": "Seminário", "nota": 7.0 },
+    { "nome": "Gustavo Lima", "trabalho": "Seminário", "nota": 3.5 },
+    { "nome": "Tatiane Souza", "trabalho": "Seminário", "nota": 9.0 },
+    { "nome": "Eduardo Melo", "trabalho": "Seminário", "nota": 6.5 },
+    { "nome": "Camila Nunes", "trabalho": "TCC", "nota": 8.0 },
+    { "nome": "Bruno Carvalho", "trabalho": "TCC", "nota": 5.5 },
+    { "nome": "Larissa Teixeira", "trabalho": "TCC", "nota": 8.5 },
+    { "nome": "Diego Moreira", "trabalho": "TCC", "nota": 7.0 },
+    { "nome": "Isabela Ramos", "trabalho": "TCC", "nota": 9.0 },
+    { "nome": "Felipe Cardoso", "trabalho": "TCC", "nota": 4.5 },
+    { "nome": "Natália Pinto", "trabalho": "TCC", "nota": 7.5 },
+    { "nome": "Gustavo Lima", "trabalho": "TCC", "nota": 6.0 },
+    { "nome": "Tatiane Souza", "trabalho": "TCC", "nota": 8.5 },
+    { "nome": "Eduardo Melo", "trabalho": "TCC", "nota": 5.0 }
+  ]
+}
