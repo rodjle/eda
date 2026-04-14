@@ -35,7 +35,7 @@ loadEnvFile();
 
 const connectionString = process.env.SERVICE_BUS_CONNECTION_STRING;
 const queueName = process.env.SERVICE_BUS_QUEUE_NAME;
-const outputPath = process.env.HTML_OUTPUT_PATH || "./saida/resumo.html";
+const outputPath = path.resolve(__dirname, process.env.HTML_OUTPUT_PATH || "./saida/resumo.html");
 
 if (!connectionString || !queueName) {
   throw new Error(

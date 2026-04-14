@@ -1,0 +1,20 @@
+{
+  "alunos": [
+    { "nome": "Sofia Andrade",    "trabalho": "Projeto Alpha", "nota": 9.5 },
+    { "nome": "Miguel Correia",   "trabalho": "Projeto Alpha", "nota": 6.0 },
+    { "nome": "Laura Nascimento", "trabalho": "Projeto Alpha", "nota": 8.0 },
+    { "nome": "Gabriel Torres",   "trabalho": "Projeto Alpha", "nota": 4.5 },
+    { "nome": "Isadora Campos",   "trabalho": "Projeto Alpha", "nota": 7.5 },
+    { "nome": "Henrique Vaz",     "trabalho": "Projeto Alpha", "nota": 5.0 },
+    { "nome": "Yasmin Freitas",   "trabalho": "Projeto Alpha", "nota": 9.0 },
+    { "nome": "Nicolas Barros",   "trabalho": "Projeto Alpha", "nota": 3.5 },
+    { "nome": "Sofia Andrade",    "trabalho": "Apresentação",  "nota": 10.0 },
+    { "nome": "Miguel Correia",   "trabalho": "Apresentação",  "nota": 7.0 },
+    { "nome": "Laura Nascimento", "trabalho": "Apresentação",  "nota": 8.5 },
+    { "nome": "Gabriel Torres",   "trabalho": "Apresentação",  "nota": 6.0 },
+    { "nome": "Isadora Campos",   "trabalho": "Apresentação",  "nota": 8.0 },
+    { "nome": "Henrique Vaz",     "trabalho": "Apresentação",  "nota": 6.5 },
+    { "nome": "Yasmin Freitas",   "trabalho": "Apresentação",  "nota": 9.5 },
+    { "nome": "Nicolas Barros",   "trabalho": "Apresentação",  "nota": 4.0 }
+  ]
+}

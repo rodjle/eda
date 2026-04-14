@@ -1,9 +1,33 @@
+const fs = require("fs");
+const path = require("path");
 const { ServiceBusClient } = require("@azure/service-bus");
 const { connectionString, queueName, eventGridTopicEndpoint } = require("./config");
 const { logStep, logWarning, logError, logSuccess, logDebug } = require("./logger");
 const { parseMessageBody, downloadBlob } = require("./blobClient");
 const { calcularResumo } = require("./resumoService");
 const { publicarEventoResumo } = require("./eventGridClient");
+
+const PID_FILE = path.resolve(__dirname, "notasprocessor.pid");
+
+function verificarInstanciaUnica() {
+  if (fs.existsSync(PID_FILE)) {
+    const pid = parseInt(fs.readFileSync(PID_FILE, "utf-8").trim(), 10);
+    try {
+      process.kill(pid, 0);
+      console.error(`[ERRO] Ja existe uma instancia rodando (PID ${pid}). Encerrando.`);
+      process.exit(1);
+    } catch (_) {
+      // processo morto, PID file obsoleto — pode continuar
+    }
+  }
+  fs.writeFileSync(PID_FILE, String(process.pid), "utf-8");
+  const limpar = () => { try { fs.unlinkSync(PID_FILE); } catch (_) {} };
+  process.on("exit", limpar);
+  process.on("SIGINT", () => { limpar(); process.exit(0); });
+  process.on("SIGTERM", () => { limpar(); process.exit(0); });
+}
+
+verificarInstanciaUnica();
 
 async function iniciar() {
   logStep("Iniciando notasprocessor.");
@@ -43,9 +67,7 @@ async function iniciar() {
         logStep("Confirmando a mensagem como processada na fila de entrada.");
         await receiver.completeMessage(mensagem);
 
-        logSuccess(
-          `Processo executado com sucesso. Resumo com ${resumo.totalAlunos} aluno(s), media da turma ${resumo.mediaTurma}, enviado para o topico '${eventGridTopicEndpoint}'.`
-        );
+        logSuccess(resumo, eventGridTopicEndpoint);
       } catch (error) {
         const erroDeValidacao =
           error instanceof SyntaxError ||
